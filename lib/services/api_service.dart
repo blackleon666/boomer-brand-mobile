@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://YOUR_DUCKDNS_DOMAIN.duckdns.org:10000';
+  static const String baseUrl = 'http://boomerbot.duckdns.org:10000';
   static const String adminToken = 'boomer-admin-2026';
 
   static final Map<String, String> _headers = {

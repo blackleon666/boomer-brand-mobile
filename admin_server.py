@@ -1,12 +1,14 @@
 """
 BOOMER BRAND ADMIN API SERVER
 Bot ile entegre admin paneli için HTTP API
+localhost:10000 üzerinde çalışır
 """
 
 import os
 import sys
 import json
 import logging
+import threading
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -16,8 +18,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 app = Flask(__name__)
 CORS(app)
 
-ADMIN_TOKEN = 'boomer-admin-2026'
+from config import ADMIN_TOKEN
 LOG_FILE = 'logs/admin.log'
+DB_PATH = 'data/boomer.db'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -162,10 +165,11 @@ def restart_bot():
 
 if __name__ == '__main__':
     os.makedirs('logs', exist_ok=True)
+    os.makedirs('data', exist_ok=True)
     log_action('SERVER_START', 'Admin API server started')
     print('=' * 50)
     print('   BOOMER BRAND ADMIN API')
     print('   Port: 10000')
     print('   Token: boomer-admin-2026')
     print('=' * 50)
-    app.run(host='0.0.0.0', port=10000, debug=False)
+    app.run(host='0.0.0.0', port=10000, debug=False, threaded=True)
