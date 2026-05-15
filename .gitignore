@@ -1,0 +1,11 @@
+*.iml
+.DS_Store
+.pub-cache/
+.packages
+build/
+.android/
+.ios/
+.dart_tool/
+*.swp
+*.swo
+*~
