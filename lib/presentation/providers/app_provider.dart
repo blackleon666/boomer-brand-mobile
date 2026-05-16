@@ -29,6 +29,12 @@ class AppProvider extends ChangeNotifier {
   List<String> _logs = [];
   List<String> get logs => _logs;
 
+  List<PotentialCustomer> _customers = [];
+  List<PotentialCustomer> get customers => _customers;
+
+  BotStatus _botStatus = BotStatus(isRunning: false);
+  BotStatus get botStatus => _botStatus;
+
   LoadingState _state = LoadingState.initial;
   LoadingState get state => _state;
 
@@ -56,6 +62,8 @@ class AppProvider extends ChangeNotifier {
         _repository.getOrders().catchError((_) => <Order>[]),
         _repository.getProducts().catchError((_) => <Product>[]),
         _repository.getFeedbacks().catchError((_) => <Feedback>[]),
+        _repository.getCustomers().catchError((_) => <PotentialCustomer>[]),
+        _repository.getBotStatus().catchError((_) => BotStatus(isRunning: false)),
       ]);
 
       _isOnline = results[0] as bool;
@@ -64,6 +72,8 @@ class AppProvider extends ChangeNotifier {
       _orders = results[3] as List<Order>;
       _products = results[4] as List<Product>;
       _feedbacks = results[5] as List<Feedback>;
+      _customers = results[6] as List<PotentialCustomer>;
+      _botStatus = results[7] as BotStatus;
 
       _state = LoadingState.loaded;
     } catch (e) {
@@ -126,4 +136,17 @@ class AppProvider extends ChangeNotifier {
   int get paidOrdersCount => _orders.where((o) => o.status == 'paid').length;
   int get shippedOrdersCount => _orders.where((o) => o.status == 'shipped').length;
   int get unreadFeedbacksCount => _feedbacks.where((f) => !f.isRead).length;
+  int get newCustomersCount => _customers.where((c) => !c.isContacted).length;
+
+  Future<bool> markCustomerContacted(int customerId) async {
+    try {
+      await _repository.markCustomerContacted(customerId);
+      await loadAllData();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
 }

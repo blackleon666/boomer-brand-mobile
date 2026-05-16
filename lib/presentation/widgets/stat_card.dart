@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../../theme/app_theme.dart' show AppColors;
 
 class StatCard extends StatelessWidget {
   final String label;
   final String value;
   final IconData icon;
   final Color? iconColor;
-  final VoidCallback? onTap;
+  final bool isHighlighted;
 
   const StatCard({
     super.key,
@@ -15,52 +15,60 @@ class StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     this.iconColor,
-    this.onTap,
+    this.isHighlighted = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppTheme.bgCard,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.border),
+    final color = iconColor ?? AppColors.primary;
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: isHighlighted
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [color.withValues(alpha: 0.15), color.withValues(alpha: 0.05)],
+              )
+            : null,
+        color: isHighlighted ? null : AppColors.bgCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isHighlighted ? color.withValues(alpha: 0.3) : AppColors.border,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: (iconColor ?? AppTheme.gold).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: iconColor ?? AppTheme.gold, size: 22),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
             ),
-            const Spacer(),
-            Text(
-              value,
-              style: GoogleFonts.inter(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
-              ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const Spacer(),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.textSecondary,
-              ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textSecondary,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

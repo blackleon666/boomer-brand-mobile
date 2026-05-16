@@ -120,4 +120,19 @@ class ApiRepository {
   Future<String> updateOrderStatus(String orderId, String status) async {
     return _post(ApiEndpoints.orderStatus(orderId), {'status': status}, (data) => data['message'] ?? 'Status updated');
   }
+
+  Future<List<PotentialCustomer>> getCustomers() async {
+    return _get(ApiEndpoints.customers, (data) {
+      final list = data['customers'] as List? ?? [];
+      return list.map((e) => PotentialCustomer.fromJson(e)).toList();
+    });
+  }
+
+  Future<BotStatus> getBotStatus() async {
+    return _get(ApiEndpoints.botStatus, (data) => BotStatus.fromJson(data));
+  }
+
+  Future<String> markCustomerContacted(int customerId) async {
+    return _post('$ApiEndpoints.customers/$customerId/contact', {}, (data) => data['message'] ?? 'Updated');
+  }
 }

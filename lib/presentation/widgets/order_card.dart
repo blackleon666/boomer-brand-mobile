@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/models/models.dart';
-import '../../theme/app_theme.dart';
+import '../../theme/app_theme.dart' show AppColors;
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -19,11 +19,11 @@ class OrderCard extends StatelessWidget {
 
   Color get _statusColor {
     switch (order.status) {
-      case 'paid': return AppTheme.success;
-      case 'shipped': return AppTheme.gold;
-      case 'delivered': return AppTheme.success;
-      case 'payment_rejected': return AppTheme.error;
-      default: return AppTheme.textSecondary;
+      case 'paid': return AppColors.success;
+      case 'shipped': return AppColors.warning;
+      case 'delivered': return AppColors.success;
+      case 'payment_rejected': return AppColors.error;
+      default: return AppColors.textSecondary;
     }
   }
 
@@ -42,9 +42,9 @@ class OrderCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppTheme.bgCard,
+        color: AppColors.bgCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
@@ -61,10 +61,10 @@ class OrderCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppTheme.gold.withValues(alpha: 0.15),
+                            color: AppColors.warning.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.receipt_long, color: AppTheme.gold, size: 20),
+                          child: const Icon(Icons.receipt_long, color: AppColors.warning, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Text(
@@ -72,7 +72,7 @@ class OrderCard extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.gold,
+                            color: AppColors.warning,
                           ),
                         ),
                       ],
@@ -119,7 +119,7 @@ class OrderCard extends StatelessWidget {
                       child: _ActionButton(
                         label: 'Onayla',
                         icon: Icons.check,
-                        color: AppTheme.success,
+                        color: AppColors.success,
                         onTap: onConfirm,
                       ),
                     ),
@@ -128,7 +128,7 @@ class OrderCard extends StatelessWidget {
                       child: _ActionButton(
                         label: 'Reddet',
                         icon: Icons.close,
-                        color: AppTheme.error,
+                        color: AppColors.error,
                         onTap: onReject,
                       ),
                     ),
@@ -138,7 +138,7 @@ class OrderCard extends StatelessWidget {
                       child: _ActionButton(
                         label: 'Kargo Ekle',
                         icon: Icons.local_shipping,
-                        color: AppTheme.gold,
+                        color: AppColors.warning,
                         onTap: onAddTracking,
                       ),
                     ),
@@ -156,8 +156,8 @@ class OrderCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: GoogleFonts.inter(fontSize: 13, color: AppTheme.textSecondary)),
-          Text(value, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+          Text(label, style: GoogleFonts.inter(fontSize: 13, color: AppColors.textSecondary)),
+          Text(value, style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
         ],
       ),
     );

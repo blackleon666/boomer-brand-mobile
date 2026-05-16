@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/models/models.dart' as models;
-import '../../theme/app_theme.dart';
+import '../../theme/app_theme.dart' show AppColors;
 
 class FeedbackCard extends StatelessWidget {
   final models.Feedback feedback;
@@ -11,12 +11,19 @@ class FeedbackCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isComplaint = feedback.isComplaint;
-    final color = isComplaint ? AppTheme.error : AppTheme.gold;
+    final color = isComplaint ? AppColors.error : AppColors.primary;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            color.withValues(alpha: 0.08),
+            color.withValues(alpha: 0.03),
+          ],
+        ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
@@ -31,7 +38,7 @@ class FeedbackCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     isComplaint ? Icons.warning_amber_rounded : Icons.lightbulb_outline,
@@ -56,6 +63,28 @@ class FeedbackCard extends StatelessWidget {
                     ),
                   ),
                 ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.bgElevated,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.person, size: 12, color: AppColors.textTertiary),
+                      const SizedBox(width: 4),
+                      Text(
+                        feedback.displayUserId,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: 11,
+                          color: AppColors.textTertiary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -63,29 +92,34 @@ class FeedbackCard extends StatelessWidget {
               feedback.message,
               style: GoogleFonts.inter(
                 fontSize: 14,
-                color: AppTheme.textPrimary,
+                color: AppColors.textPrimary,
                 height: 1.5,
               ),
             ),
             const SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.person_outline, size: 14, color: AppTheme.textSecondary),
-                const SizedBox(width: 6),
-                Text(
-                  '@${feedback.username ?? feedback.userId.toString()}',
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    color: AppTheme.textSecondary,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.bgElevated,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '@${feedback.username ?? 'bilinmiyor'}',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ),
                 const Spacer(),
                 if (feedback.createdAt != null) ...[
-                  Icon(Icons.access_time, size: 14, color: AppTheme.textSecondary),
+                  Icon(Icons.access_time, size: 14, color: AppColors.textTertiary),
                   const SizedBox(width: 6),
                   Text(
                     _formatDate(feedback.createdAt!),
-                    style: GoogleFonts.inter(fontSize: 12, color: AppTheme.textSecondary),
+                    style: GoogleFonts.inter(fontSize: 12, color: AppColors.textTertiary),
                   ),
                 ],
               ],
@@ -99,7 +133,7 @@ class FeedbackCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final diff = now.difference(date);
-    if (diff.inMinutes < 60) return '${diff.inMinutes}d';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}dk';
     if (diff.inHours < 24) return '${diff.inHours}s';
     if (diff.inDays < 7) return '${diff.inDays}g';
     return '${date.day}/${date.month}';

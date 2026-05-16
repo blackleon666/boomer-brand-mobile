@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../theme/app_theme.dart';
+import '../../theme/app_theme.dart' show AppColors;
 
 class LogViewer extends StatelessWidget {
   final List<String> logs;
@@ -20,11 +20,11 @@ class LogViewer extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Icon(Icons.article_outlined, color: AppTheme.textSecondary.withValues(alpha: 0.5), size: 40),
+              Icon(Icons.article_outlined, color: AppColors.textTertiary.withValues(alpha: 0.5), size: 40),
               const SizedBox(height: 12),
               Text(
                 'Log kaydı yok',
-                style: GoogleFonts.inter(color: AppTheme.textSecondary),
+                style: GoogleFonts.inter(color: AppColors.textTertiary),
               ),
             ],
           ),
@@ -37,21 +37,21 @@ class LogViewer extends StatelessWidget {
     return Container(
       height: 250,
       decoration: BoxDecoration(
-        color: AppTheme.bgPrimary,
+        color: AppColors.bgDark,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppColors.border),
       ),
       child: ListView.builder(
         padding: const EdgeInsets.all(12),
         itemCount: displayLogs.length,
         itemBuilder: (context, index) {
           final log = displayLogs[index];
-          final isError = log.contains('ERROR') || log.contains('error');
-          final isWarning = log.contains('WARNING') || log.contains('warning');
+          final isError = log.contains('ERROR') || log.contains('error') || log.contains('HATA');
+          final isWarning = log.contains('WARNING') || log.contains('warning') || log.contains('UYARI');
 
           Color? textColor;
-          if (isError) textColor = AppTheme.error;
-          else if (isWarning) textColor = AppTheme.gold;
+          if (isError) textColor = AppColors.error;
+          else if (isWarning) textColor = AppColors.warning;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
@@ -59,7 +59,7 @@ class LogViewer extends StatelessWidget {
               log,
               style: GoogleFonts.jetBrainsMono(
                 fontSize: 11,
-                color: textColor ?? AppTheme.textSecondary,
+                color: textColor ?? AppColors.textSecondary,
                 height: 1.4,
               ),
               maxLines: 1,

@@ -16,6 +16,8 @@ class ApiEndpoints {
   static const String feedbacks = '/api/feedbacks';
   static const String logs = '/api/logs';
   static const String restart = '/api/restart';
+  static const String customers = '/api/customers';
+  static const String botStatus = '/api/bot/status';
 
   static String orderConfirm(String orderId) => '/api/orders/$orderId/confirm';
   static String orderReject(String orderId) => '/api/orders/$orderId/reject';

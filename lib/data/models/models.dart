@@ -101,6 +101,7 @@ class Feedback {
   final int id;
   final int userId;
   final String? username;
+  final String? userTelegramId;
   final String type;
   final String message;
   final bool isRead;
@@ -110,6 +111,7 @@ class Feedback {
     required this.id,
     required this.userId,
     this.username,
+    this.userTelegramId,
     required this.type,
     required this.message,
     this.isRead = false,
@@ -121,6 +123,7 @@ class Feedback {
       id: json['id'] ?? 0,
       userId: json['user_id'] ?? 0,
       username: json['username'],
+      userTelegramId: json['user_telegram_id']?.toString(),
       type: json['type'] ?? 'sikayet',
       message: json['message'] ?? '',
       isRead: json['is_read'] == 1 || json['is_read'] == true,
@@ -129,6 +132,8 @@ class Feedback {
   }
 
   bool get isComplaint => type == 'sikayet';
+  
+  String get displayUserId => userTelegramId ?? userId.toString();
 }
 
 class Stats {
@@ -177,6 +182,103 @@ class Stats {
   String get uptimeFormatted {
     final hours = uptime ~/ 3600;
     final minutes = (uptime % 3600) ~/ 60;
+    return '${hours}s ${minutes}d';
+  }
+}
+
+class PotentialCustomer {
+  final int id;
+  final int userId;
+  final String? telegramId;
+  final String? username;
+  final String? firstName;
+  final String? lastName;
+  final String? phone;
+  final String? email;
+  final String? notes;
+  final String source;
+  final DateTime? createdAt;
+  final bool isContacted;
+
+  PotentialCustomer({
+    required this.id,
+    required this.userId,
+    this.telegramId,
+    this.username,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.email,
+    this.notes,
+    this.source = 'telegram',
+    this.createdAt,
+    this.isContacted = false,
+  });
+
+  factory PotentialCustomer.fromJson(Map<String, dynamic> json) {
+    return PotentialCustomer(
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      telegramId: json['telegram_id']?.toString(),
+      username: json['username'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      phone: json['phone'],
+      email: json['email'],
+      notes: json['notes'],
+      source: json['source'] ?? 'telegram',
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
+      isContacted: json['is_contacted'] == 1 || json['is_contacted'] == true,
+    );
+  }
+
+  String get fullName {
+    if (firstName != null && lastName != null) {
+      return '$firstName $lastName';
+    }
+    return firstName ?? username ?? 'Bilinmiyor';
+  }
+
+  String get displayContact => phone ?? email ?? telegramId ?? '-';
+}
+
+class BotStatus {
+  final bool isRunning;
+  final double uptime;
+  final int totalUsers;
+  final int totalMessages;
+  final String? lastActivity;
+  final double? cpuUsage;
+  final double? memoryUsage;
+
+  BotStatus({
+    required this.isRunning,
+    this.uptime = 0,
+    this.totalUsers = 0,
+    this.totalMessages = 0,
+    this.lastActivity,
+    this.cpuUsage,
+    this.memoryUsage,
+  });
+
+  factory BotStatus.fromJson(Map<String, dynamic> json) {
+    return BotStatus(
+      isRunning: json['is_running'] ?? true,
+      uptime: (json['uptime'] ?? 0).toDouble(),
+      totalUsers: json['total_users'] ?? 0,
+      totalMessages: json['total_messages'] ?? 0,
+      lastActivity: json['last_activity'],
+      cpuUsage: json['cpu_usage']?.toDouble(),
+      memoryUsage: json['memory_usage']?.toDouble(),
+    );
+  }
+
+  String get uptimeFormatted {
+    if (uptime == 0) return '-';
+    final hours = uptime ~/ 3600;
+    final minutes = (uptime % 3600) ~/ 60;
+    final days = hours ~/ 24;
+    if (days > 0) return '${days}g ${hours % 24}s';
     return '${hours}s ${minutes}d';
   }
 }
