@@ -68,7 +68,7 @@ class BoomerApp extends StatelessWidget {
         ),
         iconTheme: const IconThemeData(color: AppTheme.gold),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppTheme.bgCard,
         elevation: 0,
         shape: RoundedRectangleBorder(

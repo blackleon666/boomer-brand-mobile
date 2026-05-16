@@ -41,7 +41,7 @@ class AppTheme {
       ),
       iconTheme: const IconThemeData(color: gold),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: bgCard,
       elevation: 0,
       shape: RoundedRectangleBorder(

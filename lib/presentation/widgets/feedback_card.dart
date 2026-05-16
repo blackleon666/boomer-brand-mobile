@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../data/models/models.dart';
+import '../../data/models/models.dart' as models;
 import '../../theme/app_theme.dart';
 
 class FeedbackCard extends StatelessWidget {
-  final Feedback feedback;
+  final models.Feedback feedback;
 
   const FeedbackCard({super.key, required this.feedback});
 
